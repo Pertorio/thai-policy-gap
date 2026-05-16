@@ -20,9 +20,7 @@ STANDARD_PATHS = {
 
 # Load Standard Data from YAML file
 def load_standard(standard_code: str):
-    #file_code = "DGS3-1"
-    file_path = "standards/"+standard_code+".yaml"
-    with open(file=file_path, encoding="utf-8") as f:
+    with open(file=standard_code, encoding="utf-8") as f:
         foo = yaml.safe_load(f)
         return foo
 
