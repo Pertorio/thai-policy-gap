@@ -1,0 +1,211 @@
+name: "พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA)"
+short_code: "PDPA"
+reference: "พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562"
+checklist:
+  # ===== หมวด 1: ฐานทางกฎหมายและการเก็บรวบรวมข้อมูล =====
+  - id: "PDPA-01"
+    category: "ฐานทางกฎหมาย"
+    requirement: "ต้องระบุฐานทางกฎหมาย (lawful basis) ในการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคล ตามมาตรา 24 (เช่น ความยินยอม, สัญญา, หน้าที่ตามกฎหมาย, ประโยชน์โดยชอบด้วยกฎหมาย, ประโยชน์สำคัญต่อชีวิต, ภารกิจของรัฐ)"
+    severity_if_missing: "high"
+
+  - id: "PDPA-02"
+    category: "ฐานทางกฎหมาย"
+    requirement: "กรณีข้อมูลอ่อนไหว (Sensitive Data) ตามมาตรา 26 ต้องมีฐานทางกฎหมายเฉพาะ เช่น ความยินยอมโดยชัดแจ้ง (explicit consent) หรือฐานยกเว้นตามที่กฎหมายกำหนด"
+    severity_if_missing: "high"
+
+  - id: "PDPA-03"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "ต้องเก็บรวบรวมข้อมูลส่วนบุคคลเท่าที่จำเป็นภายใต้วัตถุประสงค์อันชอบด้วยกฎหมาย (Data Minimization) ตามมาตรา 22"
+    severity_if_missing: "high"
+
+  - id: "PDPA-04"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "ต้องแจ้งวัตถุประสงค์ในการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลให้เจ้าของข้อมูลทราบก่อนหรือขณะเก็บรวบรวม (Privacy Notice) ตามมาตรา 23"
+    severity_if_missing: "high"
+
+  - id: "PDPA-05"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "Privacy Notice ต้องระบุรายละเอียดครบถ้วน ได้แก่ วัตถุประสงค์, ฐานทางกฎหมาย, ข้อมูลที่เก็บ, ระยะเวลาจัดเก็บ, ผู้รับโอน/เปิดเผยข้อมูล, สิทธิของเจ้าของข้อมูล และช่องทางติดต่อผู้ควบคุมข้อมูล/DPO"
+    severity_if_missing: "high"
+
+  - id: "PDPA-06"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "ต้องได้รับความยินยอม (Consent) อย่างชัดแจ้ง โดยทำเป็นหนังสือหรือผ่านระบบอิเล็กทรอนิกส์ก่อนหรือขณะเก็บรวบรวม ในกรณีที่ใช้ฐานความยินยอม ตามมาตรา 19"
+    severity_if_missing: "high"
+
+  - id: "PDPA-07"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "การขอความยินยอมต้องแยกออกจากข้อความอื่นอย่างชัดเจน เข้าใจง่าย ไม่หลอกลวง และไม่เป็นเงื่อนไขจำเป็นต่อการให้บริการเกินสมควร"
+    severity_if_missing: "high"
+
+  - id: "PDPA-08"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "เจ้าของข้อมูลสามารถถอนความยินยอมได้โดยง่ายเช่นเดียวกับการให้ความยินยอม และต้องระงับการประมวลผลทันทีเมื่อถอน ตามมาตรา 19 วรรคห้า"
+    severity_if_missing: "high"
+
+  - id: "PDPA-09"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "ห้ามเก็บรวบรวมข้อมูลส่วนบุคคลจากแหล่งอื่นที่ไม่ใช่จากเจ้าของข้อมูลโดยตรง เว้นแต่เข้าข้อยกเว้น และต้องแจ้งภายใน 30 วัน ตามมาตรา 25"
+    severity_if_missing: "high"
+
+  - id: "PDPA-10"
+    category: "การเก็บรวบรวมข้อมูล"
+    requirement: "กรณีเก็บข้อมูลของผู้เยาว์ (อายุต่ำกว่า 20 ปี) ต้องได้รับความยินยอมจากผู้ใช้อำนาจปกครอง โดยเฉพาะเด็กอายุต่ำกว่า 10 ปี ตามมาตรา 20"
+    severity_if_missing: "high"
+
+  # ===== หมวด 2: สิทธิของเจ้าของข้อมูล =====
+  - id: "PDPA-11"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องรับรองสิทธิในการขอเข้าถึงและขอรับสำเนาข้อมูลส่วนบุคคล (Right to Access) ตามมาตรา 30"
+    severity_if_missing: "high"
+
+  - id: "PDPA-12"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องรับรองสิทธิในการขอให้โอนย้ายข้อมูล (Right to Data Portability) ตามมาตรา 31"
+    severity_if_missing: "high"
+
+  - id: "PDPA-13"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องรับรองสิทธิในการคัดค้านการประมวลผลข้อมูล (Right to Object) ตามมาตรา 32"
+    severity_if_missing: "high"
+
+  - id: "PDPA-14"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องรับรองสิทธิในการขอให้ลบหรือทำลายข้อมูล (Right to Erasure / Right to be Forgotten) ตามมาตรา 33"
+    severity_if_missing: "high"
+
+  - id: "PDPA-15"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องรับรองสิทธิในการขอให้ระงับการใช้ข้อมูล (Right to Restriction of Processing) ตามมาตรา 34"
+    severity_if_missing: "high"
+
+  - id: "PDPA-16"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องรับรองสิทธิในการขอแก้ไขข้อมูลให้ถูกต้อง เป็นปัจจุบัน สมบูรณ์ และไม่ก่อให้เกิดความเข้าใจผิด (Right to Rectification) ตามมาตรา 35–36"
+    severity_if_missing: "high"
+
+  - id: "PDPA-17"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องรับรองสิทธิในการร้องเรียนต่อคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (Right to Lodge a Complaint) ตามมาตรา 73"
+    severity_if_missing: "medium"
+
+  - id: "PDPA-18"
+    category: "สิทธิของเจ้าของข้อมูล"
+    requirement: "ต้องมีช่องทางและกระบวนการรับคำร้องขอใช้สิทธิที่ชัดเจน และตอบสนองภายในระยะเวลาที่กฎหมายกำหนด (โดยทั่วไป 30 วัน)"
+    severity_if_missing: "high"
+
+  # ===== หมวด 3: ความมั่นคงปลอดภัยของข้อมูล =====
+  - id: "PDPA-19"
+    category: "ความมั่นคงปลอดภัย"
+    requirement: "ต้องจัดให้มีมาตรการรักษาความมั่นคงปลอดภัยที่เหมาะสม ทั้งด้านบริหารจัดการ (Administrative), ด้านเทคนิค (Technical) และด้านกายภาพ (Physical Safeguards) ตามมาตรา 37(1)"
+    severity_if_missing: "high"
+
+  - id: "PDPA-20"
+    category: "ความมั่นคงปลอดภัย"
+    requirement: "ต้องมีการควบคุมการเข้าถึงข้อมูลส่วนบุคคล (Access Control) และกำหนดสิทธิตามหลัก Least Privilege รวมถึงบันทึก log การเข้าถึง"
+    severity_if_missing: "high"
+
+  - id: "PDPA-21"
+    category: "ความมั่นคงปลอดภัย"
+    requirement: "ต้องมีการเข้ารหัส (Encryption) หรือทำให้ข้อมูลไม่สามารถระบุตัวตนได้ (Pseudonymization/Anonymization) สำหรับข้อมูลที่อ่อนไหวหรือมีความเสี่ยงสูง"
+    severity_if_missing: "medium"
+
+  - id: "PDPA-22"
+    category: "ความมั่นคงปลอดภัย"
+    requirement: "ต้องกำหนดระยะเวลาในการเก็บรักษาข้อมูล (Retention Period) และลบหรือทำลายเมื่อพ้นกำหนดหรือเมื่อหมดความจำเป็น ตามมาตรา 37(3)"
+    severity_if_missing: "high"
+
+  - id: "PDPA-23"
+    category: "ความมั่นคงปลอดภัย"
+    requirement: "ต้องมีกระบวนการตรวจสอบและทบทวนมาตรการรักษาความมั่นคงปลอดภัยอย่างสม่ำเสมอ"
+    severity_if_missing: "medium"
+
+  # ===== หมวด 4: การแจ้งเหตุละเมิดข้อมูลส่วนบุคคล =====
+  - id: "PDPA-24"
+    category: "การแจ้งเหตุละเมิด"
+    requirement: "ต้องแจ้งเหตุการละเมิดข้อมูลส่วนบุคคล (Data Breach Notification) แก่สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมงนับแต่ทราบเหตุ ตามมาตรา 37(4)"
+    severity_if_missing: "high"
+
+  - id: "PDPA-25"
+    category: "การแจ้งเหตุละเมิด"
+    requirement: "กรณีการละเมิดมีความเสี่ยงสูงต่อสิทธิและเสรีภาพของบุคคล ต้องแจ้งเจ้าของข้อมูลทราบโดยไม่ชักช้า พร้อมแนวทางเยียวยา"
+    severity_if_missing: "high"
+
+  - id: "PDPA-26"
+    category: "การแจ้งเหตุละเมิด"
+    requirement: "ต้องมีกระบวนการตอบสนองต่อเหตุละเมิด (Incident Response Plan) และการบันทึกเหตุการณ์ละเมิดทุกกรณี"
+    severity_if_missing: "medium"
+
+  # ===== หมวด 5: การส่งหรือโอนข้อมูลไปต่างประเทศ =====
+  - id: "PDPA-27"
+    category: "การส่งต่อข้อมูล"
+    requirement: "การส่งหรือโอนข้อมูลส่วนบุคคลไปต่างประเทศ ประเทศปลายทางต้องมีมาตรฐานการคุ้มครองข้อมูลที่เพียงพอ (Adequacy) ตามมาตรา 28"
+    severity_if_missing: "high"
+
+  - id: "PDPA-28"
+    category: "การส่งต่อข้อมูล"
+    requirement: "หากประเทศปลายทางไม่มีมาตรฐานเพียงพอ ต้องจัดให้มีมาตรการคุ้มครองที่เหมาะสม เช่น Binding Corporate Rules (BCRs) หรือ Standard Contractual Clauses (SCCs)"
+    severity_if_missing: "high"
+
+  - id: "PDPA-29"
+    category: "การส่งต่อข้อมูล"
+    requirement: "ต้องแจ้งให้เจ้าของข้อมูลทราบเกี่ยวกับการส่งหรือโอนข้อมูลไปต่างประเทศใน Privacy Notice"
+    severity_if_missing: "medium"
+
+  # ===== หมวด 6: ผู้ประมวลผลและสัญญา =====
+  - id: "PDPA-30"
+    category: "ผู้ประมวลผลข้อมูล"
+    requirement: "ต้องจัดทำข้อตกลงการประมวลผลข้อมูล (Data Processing Agreement: DPA) เป็นลายลักษณ์อักษรกับผู้ประมวลผลข้อมูล (Data Processor) ตามมาตรา 40"
+    severity_if_missing: "high"
+
+  - id: "PDPA-31"
+    category: "ผู้ประมวลผลข้อมูล"
+    requirement: "ต้องกำกับดูแลให้ผู้ประมวลผลข้อมูลปฏิบัติตามคำสั่ง และมีมาตรการรักษาความปลอดภัยที่เหมาะสมไม่น้อยกว่าผู้ควบคุมข้อมูล"
+    severity_if_missing: "high"
+
+  # ===== หมวด 7: บทบาทและการกำกับดูแล =====
+  - id: "PDPA-32"
+    category: "การกำกับดูแล"
+    requirement: "ต้องกำหนดบทบาทขององค์กรชัดเจนว่าเป็น ผู้ควบคุมข้อมูล (Data Controller) หรือผู้ประมวลผลข้อมูล (Data Processor) ตามมาตรา 6"
+    severity_if_missing: "high"
+
+  - id: "PDPA-33"
+    category: "การกำกับดูแล"
+    requirement: "ต้องแต่งตั้งเจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (Data Protection Officer: DPO) ในกรณีที่กฎหมายกำหนด เช่น หน่วยงานรัฐ, ประมวลผลข้อมูลขนาดใหญ่, หรือข้อมูลอ่อนไหว ตามมาตรา 41"
+    severity_if_missing: "high"
+
+  - id: "PDPA-34"
+    category: "การกำกับดูแล"
+    requirement: "ต้องเปิดเผยช่องทางการติดต่อ DPO และผู้ควบคุมข้อมูลแก่เจ้าของข้อมูลและสำนักงานคณะกรรมการฯ ตามมาตรา 42"
+    severity_if_missing: "medium"
+
+  - id: "PDPA-35"
+    category: "การกำกับดูแล"
+    requirement: "ต้องจัดทำบันทึกรายการประมวลผลข้อมูลส่วนบุคคล (Record of Processing Activities: ROPA) ตามมาตรา 39"
+    severity_if_missing: "high"
+
+  - id: "PDPA-36"
+    category: "การกำกับดูแล"
+    requirement: "กรณีผู้ควบคุมข้อมูลอยู่นอกประเทศไทย ต้องแต่งตั้งตัวแทนในประเทศไทยเป็นลายลักษณ์อักษร ตามมาตรา 5 วรรคสอง"
+    severity_if_missing: "medium"
+
+  # ===== หมวด 8: ความรับผิดและการตรวจสอบ =====
+  - id: "PDPA-37"
+    category: "ความรับผิดและการตรวจสอบ"
+    requirement: "ต้องมีการประเมินผลกระทบด้านการคุ้มครองข้อมูลส่วนบุคคล (Data Protection Impact Assessment: DPIA) สำหรับกิจกรรมประมวลผลที่มีความเสี่ยงสูง"
+    severity_if_missing: "medium"
+
+  - id: "PDPA-38"
+    category: "ความรับผิดและการตรวจสอบ"
+    requirement: "ต้องจัดให้มีการฝึกอบรมและสร้างความตระหนัก (Awareness Training) เกี่ยวกับ PDPA แก่บุคลากรในองค์กรอย่างสม่ำเสมอ"
+    severity_if_missing: "medium"
+
+  - id: "PDPA-39"
+    category: "ความรับผิดและการตรวจสอบ"
+    requirement: "ต้องมีการตรวจสอบภายใน (Internal Audit) หรือทบทวนการปฏิบัติตามนโยบาย PDPA อย่างน้อยปีละ 1 ครั้ง"
+    severity_if_missing: "medium"
+
+  - id: "PDPA-40"
+    category: "ความรับผิดและการตรวจสอบ"
+    requirement: "ต้องมีนโยบายคุ้มครองข้อมูลส่วนบุคคล (Privacy Policy) ที่จัดทำเป็นลายลักษณ์อักษร อนุมัติโดยผู้บริหารระดับสูง และเผยแพร่ให้ผู้เกี่ยวข้องทราบ"
+    severity_if_missing: "high"
