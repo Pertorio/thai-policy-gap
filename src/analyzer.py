@@ -24,6 +24,7 @@ def load_standard(standard_code: str):
         foo = yaml.safe_load(f)
         return foo
 
+
 # Converting Standard Option into Filename    
 def map_standard(standard_name: str) -> str:
     """แปลงชื่อมาตรฐานที่ user เลือก → path ของ YAML file"""
@@ -31,6 +32,7 @@ def map_standard(standard_name: str) -> str:
         raise ValueError(f"ยังไม่รองรับมาตรฐาน: {standard_name}")
     return STANDARD_PATHS[standard_name]
     
+
 def analyze_gap(client:anthropic.Anthropic, standards:dict, policy_text: str) -> dict:
     output_format_example = """
     {
@@ -71,8 +73,14 @@ def analyze_gap(client:anthropic.Anthropic, standards:dict, policy_text: str) ->
             }
         ]
     )
-    #print(message)
-    return message
+    response_text = message.content[0].text
+    cleaned_response_text = response_text.replace("```json", "").replace("```", "").strip()
+    try:
+        return json.loads(cleaned_response_text)
+    except json.JSONDecodeError as e:
+        # ถ้า parse ไม่ผ่าน — ส่ง info กลับไปให้ debug ได้
+        raise ValueError(f"Claude ตอบ JSON ไม่ถูกต้อง: {e}\n\nRaw text:\n{response_text}")
+
 
 def summarize_document(client : anthropic.Anthropic,text: str) -> str:
     prompt_message=f"""
