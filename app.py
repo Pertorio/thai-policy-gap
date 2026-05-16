@@ -77,9 +77,10 @@ if st.button(label=con_button_lable):
         standards=standard,
         policy_text=user_policy_string
     )
+
     # Cache the result data
     st.session_state.analysis_result = message
-    st.write(message)
+    st.json(message)
 
 # Display Old Output if state is cached
 if st.session_state.analysis_result is not None:

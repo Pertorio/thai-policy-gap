@@ -72,7 +72,7 @@ def analyze_gap(client:anthropic.Anthropic, standards:dict, policy_text: str) ->
         ]
     )
     #print(message)
-    return message.content[0].text
+    return message
 
 def summarize_document(client : anthropic.Anthropic,text: str) -> str:
     prompt_message=f"""
