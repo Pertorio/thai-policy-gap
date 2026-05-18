@@ -1,0 +1,10 @@
+venv/
+thai_policy_gap_env/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.env
+.streamlit/secrets.toml
+output.txt
+test_*.py

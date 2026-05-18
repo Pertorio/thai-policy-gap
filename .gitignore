@@ -1,5 +1,7 @@
 venv/
+thai_policy_gap_env/
 .streamlit/secrets.toml
 __pycache__/
 *.pyc
 .env
+.DS_Store

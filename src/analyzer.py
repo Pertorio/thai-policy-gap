@@ -2,6 +2,12 @@ import anthropic
 import streamlit as st
 import json
 import yaml
+from src.rag_pipline import (
+    search, 
+    get_voyage_client)
+import voyageai
+import chromadb
+
 
 def get_client() -> anthropic.Anthropic:
     return anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
@@ -33,13 +39,18 @@ def map_standard(standard_name: str) -> str:
     return STANDARD_PATHS[standard_name]
     
 
-def analyze_gap(client:anthropic.Anthropic, standards:dict, policy_text: str) -> dict:
+def analyze_gap(
+        client:anthropic.Anthropic, 
+        standards:dict, 
+        policy_text: str
+        ) -> dict:
     output_format_example = """
     {
             "gaps": [
                 {
                     "checklist_id": "PDPA-01",
                     "requirement": "...",
+                    "compliance_level": "full" | "partial" | "missing",
                     "found_in_document": true/false,
                     "evidence": "ข้อความอ้างอิง หรือ null",
                     "severity": "high/medium/low",
@@ -65,7 +76,7 @@ def analyze_gap(client:anthropic.Anthropic, standards:dict, policy_text: str) ->
     
     message = client.messages.create(
         model="claude-haiku-4-5",
-        max_tokens= 8192,
+        max_tokens= 16384,
         messages=[
             {
                 "role":"user",
@@ -75,11 +86,72 @@ def analyze_gap(client:anthropic.Anthropic, standards:dict, policy_text: str) ->
     )
     response_text = message.content[0].text
     cleaned_response_text = response_text.replace("```json", "").replace("```", "").strip()
-    try:
+    try:        
+        result_json = json.loads(cleaned_response_text)
+        warnings = validate_gaps(result_json["gaps"])
+        if warnings:
+            print("⚠️ Validation warnings:")
+            for w in warnings:
+                print(f"  - {w}")
         return json.loads(cleaned_response_text)
     except json.JSONDecodeError as e:
-        # ถ้า parse ไม่ผ่าน — ส่ง info กลับไปให้ debug ได้
         raise ValueError(f"Claude ตอบ JSON ไม่ถูกต้อง: {e}\n\nRaw text:\n{response_text}")
+
+
+def analyze_gap_with_rag(
+        antropic_client: anthropic.Anthropic,
+        voyageai_client: voyageai.Client,
+        collection: chromadb.Collection,
+        standards: dict,
+        chunks_per_item: int=3):
+    
+    print("🔍 Retrieving relevant chunks...")
+    all_chunks = []
+    for item in standards["checklist"]:
+        query = item["requirement"]
+        relevant = search(
+            collection, 
+            voyageai_client, 
+            query, 
+            top_k=chunks_per_item)
+        all_chunks.extend(relevant)
+
+    #Deduplicate the chucnks
+    unique_chunks = list(dict.fromkeys(all_chunks))
+    print(f"   📊 Total chunks retrieved: {len(all_chunks)}, "
+          f"unique: {len(unique_chunks)}")
+    
+    #Join chunks to make context for AI
+    context = "\n\n---\n\n".join(unique_chunks)
+
+    return analyze_gap(
+        client=antropic_client,
+        standards=standards,
+        policy_text=context
+    )
+
+    
+    pass
+    
+
+
+def validate_gaps(gaps: list[dict]) -> list[str]:
+    warnings = []
+    VALID_COMBINATIONS = {
+        (True, "full"),
+        (True, "partial"),
+        (False, "missing"),
+    }
+    for i, gap in enumerate(gaps):
+        found = gap.get("found_in_document")
+        level = gap.get("compliance_level")
+        combo = (found, level)
+        if combo not in VALID_COMBINATIONS:
+            warnings.append(
+                f"gap[{i}] ({gap.get('checklist_id')}): "
+                f"invalid combination found={found}, level={level}"
+            )
+    return warnings
 
 
 def summarize_document(client : anthropic.Anthropic,text: str) -> str:

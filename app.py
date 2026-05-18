@@ -7,6 +7,8 @@ from src.analyzer import (
     analyze_gap,
     summarize_document
 )
+from src.render_dashboard import render_results
+import json
 
 # Page Settings
 st.set_page_config(page_title="Thai Data Governance Gap Finder", page_icon="📋")
@@ -43,25 +45,26 @@ user_standard_choice = st.multiselect(label=standard_label,
                                       options=standard_options)
 
 # Button To Continue the workflow
-con_button_lable = "Analyze"
-con_succ_massage = "Information Receive. Start Analyzing"
-con_no_policy_message = "Please select your prefer standard for gap analyzing process"
-con_no_fileupload_message = "Please Upload your Data Governance Policy"
+continue_button_lable = "Analyze"
+continue_succ_massage = "Information Receive. Start Analyzing"
+continue_no_policy_message = "Please select your prefer standard for gap analyzing process"
+continue_no_fileupload_message = "Please Upload your Data Governance Policy"
 
 # When Analyze Button is triggered
-if st.button(label=con_button_lable):
+if st.button(label=continue_button_lable):
     if len(user_standard_choice) == 0:
-        st.warning(con_no_policy_message)
+        st.warning(continue_no_policy_message)
         st.stop()
 
     if uploaded_file is None:
-        st.warning(con_no_fileupload_message)
+        st.warning(continue_no_fileupload_message)
         st.stop()
 
-    st.success(con_succ_massage)
+    st.success(continue_succ_massage)
     # User Input -> Turn PDF object into bytes-stream
     byte_uploaded_file = uploaded_file.getvalue()
     user_policy_string = extract_text_from_pdf(byte_uploaded_file)
+    
     
     # Load Selected Standards -> Dict
     standard = load_standard(
@@ -72,21 +75,30 @@ if st.button(label=con_button_lable):
     client = get_client()
     
     #Analyze Gap
-    message = analyze_gap(
-        client=client,
-        standards=standard,
-        policy_text=user_policy_string
-    )
+    with st.spinner("🤖 กำลังให้ AI วิเคราะห์..."):
+        message = analyze_gap(
+            client=client,
+            standards=standard,
+            policy_text=user_policy_string
+        )
 
     # Cache the result data
     st.session_state.analysis_result = message
-    st.json(message)
 
 # Display Old Output if state is cached
 if st.session_state.analysis_result is not None:
-    st.json(st.session_state.analysis_result)
+    render_results(st.session_state.analysis_result)
 
-
-
-# โจทย์ลับ: เพิ่ม print ตรงนี้
-print("--- script รันรอบใหม่ ---")
+# JSON download button
+if st.session_state.analysis_result:
+    json_str = json.dumps(
+        st.session_state.analysis_result, 
+        ensure_ascii=False,   # ← สำคัญสำหรับภาษาไทย!
+        indent=2
+    )
+    st.download_button(
+        label="📥 ดาวน์โหลด JSON",
+        data=json_str,
+        file_name="gap_analysis.json",
+        mime="application/json"
+    )
