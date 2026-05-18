@@ -46,7 +46,7 @@ Streamlit dashboard
 
 ### Setup
 ```bash
-git clone https://github.com/your-username/thai-policy-gap.git
+git clone https://github.com/Pertorio/thai-policy-gap.git
 cd thai-policy-gap
 python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
