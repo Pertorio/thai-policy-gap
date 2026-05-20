@@ -129,9 +129,6 @@ def analyze_gap_with_rag(
         standards=standards,
         policy_text=context
     )
-
-    
-    pass
     
 
 

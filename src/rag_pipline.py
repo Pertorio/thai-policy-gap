@@ -86,15 +86,16 @@ def embed_query(
 
 
 # For User Policy Document
-@st.cache_data
-def build_index(
-        voyage_client: voyageai.Client,
-        chunks: list[str]
+@st.cache_resource(show_spinner=False)
+def build_index_cache(
+        _voyage_client: voyageai.Client,
+        _chunks: list[str],
+        file_hash_key: str
         ) -> chromadb.Collection:
     
-    embeddings = embed_chunks(voyage_client, chunks)
+    embeddings = embed_chunks(_voyage_client, _chunks)
     chroma_client = chromadb.Client()
-    collection_name = "policy_chunks"
+    collection_name = file_hash_key
     try:
         chroma_client.delete_collection(collection_name)
     except Exception:
@@ -102,9 +103,9 @@ def build_index(
     
     collection = chroma_client.create_collection(name=collection_name)
     collection.add(
-        documents=chunks,
+        documents=_chunks,
         embeddings=embeddings,
-        ids=[f"chunk_{i}" for i in range(len(chunks))]  
+        ids=[f"chunk_{i}" for i in range(len(_chunks))]  
     )
     return collection
 

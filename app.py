@@ -4,10 +4,15 @@ from src.analyzer import (
     get_client,
     load_standard,
     map_standard,
-    analyze_gap,
+    analyze_gap_with_rag,
     summarize_document
 )
 from src.render_dashboard import render_results
+from src.utils import file_hash
+from src.rag_pipline import (
+    get_voyage_client,
+    chunk_text,
+    build_index_cache)
 import json
 
 # Page Settings
@@ -64,23 +69,35 @@ if st.button(label=continue_button_lable):
     # User Input -> Turn PDF object into bytes-stream
     byte_uploaded_file = uploaded_file.getvalue()
     user_policy_string = extract_text_from_pdf(byte_uploaded_file)
+    file_hash_key = file_hash(byte_uploaded_file)
+
+    #Initiate Clients
+    ai_client = get_client()
+    voyageai_client = get_voyage_client()
+
+    #Handle user's policy data
+    chunks = chunk_text(user_policy_string)
+    collection = build_index_cache(
+        _voyage_client=voyageai_client,
+        _chunks=chunks,
+        file_hash_key=file_hash_key
+    )
     
-    
-    # Load Selected Standards -> Dict
+    # Load Selected Standards
     standard = load_standard(
         map_standard(user_standard_choice[0])
     )
 
-    #Get Antrophic Client
-    client = get_client()
+
     
     #Analyze Gap
     with st.spinner("🤖 กำลังให้ AI วิเคราะห์..."):
-        message = analyze_gap(
-            client=client,
+        message = analyze_gap_with_rag(
+            antropic_client=ai_client,
+            voyageai_client=voyageai_client,
+            collection=collection,
             standards=standard,
-            policy_text=user_policy_string
-        )
+            chunks_per_item=2)
 
     # Cache the result data
     st.session_state.analysis_result = message
