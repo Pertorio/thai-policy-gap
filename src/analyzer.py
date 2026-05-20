@@ -2,7 +2,7 @@ import anthropic
 import streamlit as st
 import json
 import yaml
-from src.rag_pipline import (
+from src.rag_pipeline import (
     search, 
     get_voyage_client)
 import voyageai

@@ -1,5 +1,5 @@
 from src.pdf_parser import extract_text_from_pdf
-from src.rag_pipline import (
+from src.rag_pipeline import (
     chunk_text, 
     build_index, 
     get_voyage_client

@@ -9,7 +9,7 @@ from src.analyzer import (
 )
 from src.render_dashboard import render_results
 from src.utils import file_hash
-from src.rag_pipline import (
+from src.rag_pipeline import (
     get_voyage_client,
     chunk_text,
     build_index_cache)

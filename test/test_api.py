@@ -1,4 +1,4 @@
-from src.rag_pipline import chunk_text
+from src.rag_pipeline import chunk_text
 
 sample = "ABCDEFGHI" * 200  # 2000 ตัวอักษร
 chunks = chunk_text(sample, chunk_size=800, overlap=100)
