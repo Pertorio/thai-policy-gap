@@ -99,7 +99,7 @@ def analyze_gap(
 
 
 def analyze_gap_with_rag(
-        antropic_client: anthropic.Anthropic,
+        anthropic_client: anthropic.Anthropic,
         voyageai_client: voyageai.Client,
         collection: chromadb.Collection,
         standards: dict,
@@ -125,7 +125,7 @@ def analyze_gap_with_rag(
     context = "\n\n---\n\n".join(unique_chunks)
 
     return analyze_gap(
-        client=antropic_client,
+        client=anthropic_client,
         standards=standards,
         policy_text=context
     )

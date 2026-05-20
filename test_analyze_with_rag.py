@@ -35,7 +35,7 @@ import time
 t0 = time.time()
 anthropic_client = get_client()
 result = analyze_gap_with_rag(
-    antropic_client=anthropic_client,
+    anthropic_client=anthropic_client,
     voyageai_client=voyage_client,
     collection=collection,
     standards=standard,

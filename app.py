@@ -93,7 +93,7 @@ if st.button(label=continue_button_lable):
     #Analyze Gap
     with st.spinner("🤖 กำลังให้ AI วิเคราะห์..."):
         message = analyze_gap_with_rag(
-            antropic_client=ai_client,
+            anthropic_client=ai_client,
             voyageai_client=voyageai_client,
             collection=collection,
             standards=standard,
