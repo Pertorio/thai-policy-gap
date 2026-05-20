@@ -8,7 +8,7 @@ from src.rag_pipline import (
 import voyageai
 import chromadb
 
-
+@st.cache_resource
 def get_client() -> anthropic.Anthropic:
     return anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
 

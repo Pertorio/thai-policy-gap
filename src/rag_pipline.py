@@ -23,6 +23,7 @@ def chunk_text(text: str,
     return chunks
 
 
+@st.cache_resource
 def get_voyage_client() -> voyageai.Client:
     return voyageai.Client(api_key=st.secrets["VOYAGEAI_API_KEY"])
 
@@ -85,6 +86,7 @@ def embed_query(
 
 
 # For User Policy Document
+@st.cache_data
 def build_index(
         voyage_client: voyageai.Client,
         chunks: list[str]
