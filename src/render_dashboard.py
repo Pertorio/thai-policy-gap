@@ -1,7 +1,51 @@
 import streamlit as st
 
-def render_results(result: dict):
 
+def render_overview(results: list[dict]):
+    #Total Gap Status
+    total_gaps = 0
+    total_done = 0
+    total_need_update = 0
+    total_not_done = 0
+    #Total Gap Severity
+    total_high_risk = 0
+    total_medium_risk = 0
+
+    st.title("📊 สรุปภาพรวมผลการวิเคราะห์นโยบายธรรมาภิบาลข้อมูล")
+    for result in results:
+        for gap in result["gaps"]:
+            found = gap["found_in_document"]
+            level = gap["compliance_level"]
+            total_gaps += 1
+            if found and level == "full":
+                total_done += 1
+            elif found and level == "partial":
+                total_need_update += 1
+            elif not found:
+                total_not_done += 1
+
+            if level != "full":
+                if gap["severity"] == "high":
+                    total_high_risk += 1
+                elif gap["severity"] == "medium":
+                    total_medium_risk += 1
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("📋 ทั้งหมด", total_gaps)
+    col2.metric("✅ ทำได้ดี", total_done)
+    col3.metric("⚠️ ต้องปรับปรุง", total_need_update, delta_color="inverse")
+    col4.metric("❌ ยังไม่ได้ทำ", total_not_done, delta_color="inverse")
+
+    if total_high_risk + total_medium_risk > 0:
+        st.warning(
+            f"🔴 ความเสี่ยงสูง: {total_high_risk} ข้อ · "
+            f"🟡 ความเสี่ยงกลาง: {total_medium_risk} ข้อ"
+        )
+
+
+
+
+def render_results(result: dict):
     # GAP ID Status
     done = 0
     needs_update = 0 
@@ -28,7 +72,14 @@ def render_results(result: dict):
             elif gap["severity"] == "medium":
                 medium_risk += 1
     
-    st.subheader("📊 ผลการวิเคราะห์")
+    standard_name = result.get("standard_name", "")
+    standard_short_code = result.get("standard_short_code", "")
+    subheader_label = "📊 ผลการวิเคราะห์"
+    if standard_name:
+        subheader_label += f" — {standard_name}"
+        if standard_short_code:
+            subheader_label += f" ({standard_short_code})"
+    st.subheader(subheader_label)
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("📊 คะแนนรวม", f"{result['overall_score']}/100")
     col2.metric("✅ ทำได้ดี", done)

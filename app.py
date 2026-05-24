@@ -4,10 +4,11 @@ from src.analyzer import (
     get_client,
     load_standard,
     map_standard,
-    analyze_gap_with_rag,
-    summarize_document
+    analyze_gap_with_rag_cache
 )
-from src.render_dashboard import render_results
+from src.render_dashboard import (
+    render_results,
+    render_overview)
 from src.utils import file_hash
 from src.rag_pipeline import (
     get_voyage_client,
@@ -84,33 +85,47 @@ if st.button(label=continue_button_lable):
     )
     
     # Load Selected Standards
-    standard = load_standard(
-        map_standard(user_standard_choice[0])
-    )
-
-
+    # standard = load_standard(
+    #     map_standard(user_standard_choice[0])
+    # )
+    # Load Multiple Standards
+    standards_list = []
+    for standard in user_standard_choice:
+        temp = load_standard(map_standard(standard))
+        standards_list.append(temp)
+        
     
     #Analyze Gap
     with st.spinner("🤖 กำลังให้ AI วิเคราะห์..."):
-        message = analyze_gap_with_rag(
-            anthropic_client=ai_client,
-            voyageai_client=voyageai_client,
-            collection=collection,
-            standards=standard,
-            chunks_per_item=2)
+        results = []
+        for standard in standards_list:
+            std_name = standard.get("name", "")
+            message = analyze_gap_with_rag_cache(
+                file_hash_key=file_hash_key,
+                standard_name=std_name,
+                _anthropic_client=ai_client,
+                _voyageai_client=voyageai_client,
+                _collection=collection,
+                _standards=standard,
+                chunks_per_item=2)
+            message["standard_name"] = std_name
+            message["standard_short_code"] = standard.get("short_code", "")
+            results.append(message)
 
     # Cache the result data
-    st.session_state.analysis_result = message
+    st.session_state.analysis_result = results
 
 # Display Old Output if state is cached
 if st.session_state.analysis_result is not None:
-    render_results(st.session_state.analysis_result)
+    render_overview(st.session_state.analysis_result)
+    for result in st.session_state.analysis_result:
+        render_results(result=result)
 
 # JSON download button
 if st.session_state.analysis_result:
     json_str = json.dumps(
         st.session_state.analysis_result, 
-        ensure_ascii=False,   # ← สำคัญสำหรับภาษาไทย!
+        ensure_ascii=False,
         indent=2
     )
     st.download_button(

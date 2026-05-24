@@ -33,7 +33,6 @@ def load_standard(standard_code: str):
 
 # Converting Standard Option into Filename    
 def map_standard(standard_name: str) -> str:
-    """แปลงชื่อมาตรฐานที่ user เลือก → path ของ YAML file"""
     if standard_name not in STANDARD_PATHS:
         raise ValueError(f"ยังไม่รองรับมาตรฐาน: {standard_name}")
     return STANDARD_PATHS[standard_name]
@@ -128,6 +127,25 @@ def analyze_gap_with_rag(
         client=anthropic_client,
         standards=standards,
         policy_text=context
+    )
+
+
+#Cache wrapper
+@st.cache_data(show_spinner=False)
+def analyze_gap_with_rag_cache(
+        file_hash_key: str,
+        standard_name: str,
+        _anthropic_client: anthropic.Anthropic,
+        _voyageai_client: voyageai.Client,
+        _collection: chromadb.Collection,
+        _standards: dict,
+        chunks_per_item: int=3):
+    return analyze_gap_with_rag(
+        anthropic_client=_anthropic_client,
+        voyageai_client=_voyageai_client,
+        collection=_collection,
+        standards=_standards,
+        chunks_per_item=chunks_per_item
     )
     
 
